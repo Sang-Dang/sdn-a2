@@ -18,4 +18,15 @@ pagesRouter.get('/', async (req, res) => {
     })
 })
 
+pagesRouter.get('/categories', async (req, res) => {
+    let { page } = req.query
+    if (!page) page = '0'
+
+    const categories = await CategoriesService.getCategories(Number(page), 5)
+
+    res.render('pages/categories', {
+        categories,
+    })
+})
+
 export default pagesRouter

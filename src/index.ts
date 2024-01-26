@@ -29,5 +29,4 @@ app.listen(port, () => {
 app.use((err: Error, _: Request, res: Response) => {
     console.log('HI')
     console.error(err.stack) // Log error stack trace to the console
-    res.status(500).send('Something broke!')
 })
