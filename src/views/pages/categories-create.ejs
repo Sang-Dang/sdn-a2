@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+    <%- include('../partials/head.ejs', { title: "Create Category | Orchids Overflow"}) %>
+    <body>
+        <div class='flex h-screen w-full'>
+            <%- include('../partials/sidebar.ejs') %>
+            <main class="h-full w-full">
+                <header class="flex h-20 w-full items-center bg-purple-100 p-3 px-16 shadow-md">
+                    <h1 class="text-2xl font-semibold capitalize">Create Category</h1>
+                </header>
+                <div class="flex flex-col p-10">
+                    <form class="flex flex-col gap-3" method="post">
+                        <div class="flex flex-col gap-2">
+                        <label for="input_name">Name</label>
+                        <div class="flex items-center gap-3">
+                            <input id="input_name" name="name" placeholder="e.g., Mobile phones" pattern="^$|^.{3,255}$" class="peer w-full rounded-lg border-2 border-purple-300 px-5 py-2 invalid:border-red-500" />
+                            <button type="button" class="group relative hidden peer-invalid:block text-red-500">
+                            Info
+                            <div class="absolute bottom-[calc(100%+14px)] right-0 hidden w-max text-red-500 font-semibold group-hover:block bg-red-50 text-sm p-2 rounded-lg">"Name" must be between 1-255 characters.
+                                <div class="absolute top-full right-1 w-0 h-0 border-l-[12px] border-l-transparent border-t-[14px] border-t-red-50 border-r-[12px] border-r-transparent"/>
+                            </div>
+                            </button>
+                        </div>
+                        </div>
+                        <div class="flex flex-col gap-2">
+                        <label for="input_description">Description</label>
+                        <div class="flex items-center gap-3">
+                            <textarea id="input_description" name="description" placeholder="e.g., This is the greatest thing ever!" minlength="3" maxlength="255" class="peer w-full rounded-lg border-2 border-purple-300 px-5 py-2 invalid:border-red-500"></textarea>
+                            <button type="button" class="group relative hidden peer-invalid:block text-red-500">
+                            Info
+                            <div class="absolute bottom-[calc(100%+14px)] right-0 hidden w-max text-red-500 font-semibold group-hover:block bg-red-50 text-sm p-2 rounded-lg">"Description" must be between 1-255 characters.
+                                <div class="absolute top-full right-1 w-0 h-0 border-l-[12px] border-l-transparent border-t-[14px] border-t-red-50 border-r-[12px] border-r-transparent"/>
+                            </div>
+                            </button>
+                        </div>
+                        </div>
+                        <button id="category-create-submit" type="button" class="mt-3 w-56 rounded-lg bg-purple-500 px-6 py-2 font-bold text-white transition-all hover:bg-purple-400">Create Category</button>
+                    </form>
+                </div>
+            </main>
+        </div>
+    </body>
+    <script src="/script/categories-create.js"></script>
+</html>

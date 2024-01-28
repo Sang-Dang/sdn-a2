@@ -36,7 +36,9 @@ const CategoriesService = {
     },
 
     deleteCategory: async (id: string) => {
-        return await categoriesModel.findByIdAndDelete(id)
+        return await categoriesModel.findByIdAndDelete(id, {
+            new: false,
+        })
     },
 }
 

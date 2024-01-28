@@ -1,20 +1,33 @@
-<aside class="p-4 d-flex flex-column position-sticky left-0 text-bg-primary vh-100" style="width: 300px;">
-    <h1 class="fs-3">Orchids Explorer</h1>
-    <hr/>
-    <nav class="flex-grow-1">
-        <ul class="d-flex flex-column flex-grow-1" data-bs-theme="light">
-            <li class="">
-                <a class="" href="/">Dashboard</a>
-            </li>
-            <li class="">
-                <a class="nav-link" href="/">Orchids</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/categories">Categories</a>
-            </li>
-        </ul>
-    </nav>
-    <div>
-        abc
+<aside class='relative hidden h-screen bg-purple-700 shadow-xl sm:block' style="width: 20%;">
+    <div class='p-6'>
+        <div class='select-none text-3xl font-semibold uppercase text-white'>
+            Orchids Overflow
+        </div>
     </div>
+    <nav class='pt-3 text-base font-semibold text-white'>
+        <a
+            id="/orchids"
+            href='/orchids'
+            class='flex items-center py-4 pl-6 text-white opacity-75 transition-all hover:bg-purple-900 hover:opacity-100 bg-transparent'
+            style="<%= currentSite.includes('/orchids') ? 'background-color: rgb(80, 2, 132);' : '' %>"
+        >
+            <i class='fas fa-sticky-note mr-3'></i>
+            Orchids
+        </a>
+        <a
+            id="/categories"
+            href='/categories'
+            class='flex items-center py-4 pl-6 text-white opacity-75 transition-all hover:bg-purple-900 hover:opacity-100 bg-transparent'
+            style="<%= currentSite.includes('/categories') ? 'background-color: rgb(80, 2, 132);' : '' %>"
+        >
+            <i class='fas fa-table mr-3'></i>
+            Categories
+        </a>
+    </nav>
+    <a
+        href='#'
+        class='absolute bottom-0 flex w-full items-center justify-center bg-purple-800 py-4 text-white hover:bg-purple-900'
+    >
+        Login
+    </a>
 </aside>

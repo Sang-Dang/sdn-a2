@@ -5,6 +5,7 @@ import { getConnection as getDbConnection } from '@/lib/db'
 import orchidsRouter from '@/modules/orchids/orchids.router'
 import pagesRouter from '@/modules/pages/pages.router'
 import path from 'path'
+import cors from 'cors'
 
 Env.load()
 getDbConnection()
@@ -14,6 +15,14 @@ const port = Env.PORT
 
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, 'views'))
+
+app.use(
+    cors({
+        origin: '*',
+        allowedHeaders: '*',
+        methods: '*',
+    }),
+)
 
 app.use(express.static('public'))
 app.use(express.json())
@@ -27,6 +36,5 @@ app.listen(port, () => {
 })
 
 app.use((err: Error, _: Request, res: Response) => {
-    console.log('HI')
-    console.error(err.stack) // Log error stack trace to the console
+    // if (err) console.error(err.stack) // Log error stack trace to the console
 })
