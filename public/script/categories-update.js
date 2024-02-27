@@ -16,7 +16,7 @@ submitBtn.addEventListener('click', async () => {
         description.length < 3 ||
         description.length > 255
     ) {
-        alert('Invalid input')
+        alert('Inputs cannot be empty')
         return
     }
 
@@ -25,13 +25,19 @@ submitBtn.addEventListener('click', async () => {
         description,
     }
 
-    await fetch(`/api/v1/categories/${id}`, {
-        method: 'PATCH',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-    })
+    try {
+        await fetch(`/api/v1/categories/${id}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+    } catch (err) {
+        console.error(err)
+        alert('Error')
+        return
+    }
 
     window.location.href = '/categories'
 })

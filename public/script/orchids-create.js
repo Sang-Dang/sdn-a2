@@ -4,6 +4,7 @@ const priceInput = document.getElementById('input_price')
 const originInput = document.getElementById('input_origin')
 const colorInput = document.getElementById('input_color')
 const isNaturalInput = document.getElementById('input_isNatural')
+const categorySelect = document.getElementById('input_category')
 const submitBtn = document.getElementById('orchid-create-submit')
 
 submitBtn.addEventListener('click', async () => {
@@ -13,6 +14,7 @@ submitBtn.addEventListener('click', async () => {
     const origin = originInput.value
     const color = colorInput.value
     const isNatural = Boolean(isNaturalInput.checked)
+    const categoryId = categorySelect.value
 
     if (
         !name ||
@@ -28,8 +30,11 @@ submitBtn.addEventListener('click', async () => {
         origin.length > 255 ||
         !color ||
         color.length < 3 ||
-        color.length > 255
+        color.length > 255 ||
+        !categoryId
     ) {
+        alert('Inputs cannot be empty')
+        return
     }
 
     const data = {
@@ -39,15 +44,22 @@ submitBtn.addEventListener('click', async () => {
         origin,
         color,
         isNatural,
+        categoryId,
     }
 
-    await fetch('/api/v1/orchids', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-    })
+    try {
+        await fetch('/api/v1/orchids', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+    } catch (err) {
+        console.error(err)
+        alert('Error')
+        return
+    }
 
     window.location.href = '/orchids'
 })

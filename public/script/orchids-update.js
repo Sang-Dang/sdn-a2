@@ -32,6 +32,8 @@ submitBtn.addEventListener('click', async () => {
         color.length < 3 ||
         color.length > 255
     ) {
+        alert('Inputs cannot be empty')
+        return
     }
 
     const data = {
@@ -43,13 +45,19 @@ submitBtn.addEventListener('click', async () => {
         isNatural,
     }
 
-    await fetch(`/api/v1/orchids/${id}`, {
-        method: 'PATCH',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-    })
+    try {
+        await fetch(`/api/v1/orchids/${id}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+    } catch (err) {
+        console.error(err)
+        alert('Error')
+        return
+    }
 
     window.location.href = '/orchids'
 })

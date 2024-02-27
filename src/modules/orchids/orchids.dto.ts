@@ -7,6 +7,7 @@ export const OrchidsDto = z.object({
     origin: z.string().min(1).max(255),
     isNatural: z.boolean(),
     color: z.string().min(3).max(255),
+    categoryId: z.string().min(3).max(255),
 })
 
 export const OrchidsDtoPartial = OrchidsDto.partial()

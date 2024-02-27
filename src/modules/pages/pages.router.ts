@@ -1,8 +1,14 @@
+import AdminOnly from '@/common/middleware/AdminOnly'
 import CategoriesService from '@/modules/categories/categories.service'
 import OrchidsService from '@/modules/orchids/orchids.service'
 import express from 'express'
 
 const pagesRouter = express.Router()
+
+pagesRouter.use((req, res, next) => {
+    res.locals.user = req.user
+    next()
+})
 
 pagesRouter.get('/', (req, res) => {
     res.redirect('/orchids')
@@ -20,13 +26,13 @@ pagesRouter.get('/categories', async (req, res) => {
     })
 })
 
-pagesRouter.get('/categories/create', async (req, res) => {
+pagesRouter.get('/categories/create', AdminOnly, async (req, res) => {
     res.render('pages/categories-create', {
         currentSite: req.originalUrl,
     })
 })
 
-pagesRouter.get('/categories/update/:id', async (req, res) => {
+pagesRouter.get('/categories/update/:id', AdminOnly, async (req, res) => {
     const { id } = req.params
     if (!id) res.redirect('/categories')
 
@@ -44,19 +50,25 @@ pagesRouter.get('/orchids', async (req, res) => {
 
     const orchids = await OrchidsService.getOrchids(Number(page), 5)
 
+    console.log(orchids)
+
     res.render('pages/orchids', {
         orchids,
         currentSite: req.originalUrl,
     })
 })
 
-pagesRouter.get('/orchids/create', async (req, res) => {
+pagesRouter.get('/orchids/create', AdminOnly, async (req, res) => {
+    const categories = await CategoriesService.getAllCategories()
+    console.log(categories)
+
     res.render('pages/orchids-create', {
         currentSite: req.originalUrl,
+        categories,
     })
 })
 
-pagesRouter.get('/orchids/update/:id', async (req, res) => {
+pagesRouter.get('/orchids/update/:id', AdminOnly, async (req, res) => {
     const { id } = req.params
 
     if (!id) res.redirect('/orchids')
@@ -67,6 +79,14 @@ pagesRouter.get('/orchids/update/:id', async (req, res) => {
         orchid,
         currentSite: req.originalUrl,
     })
+})
+
+pagesRouter.get('/login', async (req, res) => {
+    res.render('pages/login')
+})
+
+pagesRouter.get('/register', async (req, res) => {
+    res.render('pages/register')
 })
 
 export default pagesRouter

@@ -1,3 +1,4 @@
+import AdminOnly from '@/common/middleware/AdminOnly'
 import { OrchidsDto } from '@/modules/orchids/orchids.dto'
 import OrchidsService from '@/modules/orchids/orchids.service'
 import express, { NextFunction, Response } from 'express'
@@ -10,12 +11,9 @@ orchidsRouter.get(
     '/',
     validateRequest({
         query: z.object({
-            page: z
-                .string()
-                .refine(value => !isNaN(Number(value)) && Number(value) >= 0, {
-                    message:
-                        'Page must be a numeric string and not less than 0',
-                }),
+            page: z.string().refine(value => !isNaN(Number(value)) && Number(value) >= 0, {
+                message: 'Page must be a numeric string and not less than 0',
+            }),
             limit: z.string().refine(value => !isNaN(Number(value)), {
                 message: 'Limit must be a numeric string',
             }),
@@ -24,10 +22,7 @@ orchidsRouter.get(
     async (req, res: Response, next: NextFunction) => {
         const { page, limit } = req.query
         try {
-            const result = await OrchidsService.getOrchids(
-                Number(page),
-                Number(limit),
-            )
+            const result = await OrchidsService.getOrchids(Number(page), Number(limit))
             res.status(200).send(result)
         } catch (err) {
             next(err)

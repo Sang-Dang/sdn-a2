@@ -3,7 +3,11 @@ module.exports = {
     mode: 'jit',
     content: ['./src/views/pages/*.ejs', './src/views/partials/*.ejs'],
     theme: {
-        extend: {},
+        extend: {
+            data: {
+                collapsed: 'false',
+            },
+        },
     },
     plugins: [
         {

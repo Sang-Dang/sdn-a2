@@ -2,76 +2,83 @@
 <html lang="en">
     <%- include('../partials/head.ejs', { title: 'Categories | Orchids Overflow'}) %>
     <body>
-        <div class='flex h-screen w-full'>
+        <div class="flex h-screen w-full">
             <%- include('../partials/sidebar.ejs') %>
-            <main class='h-full w-full'>
-                <header class='flex h-20 w-full items-center bg-purple-100 p-3 px-16 shadow-md'>
-                    <h1 class='text-2xl font-semibold capitalize'>
-                        Category List
-                    </h1>
+            <main class="h-full w-full">
+                <header class="flex h-20 w-full items-center bg-purple-100 p-3 px-16 shadow-md">
+                    <h1 class="text-2xl font-semibold capitalize">Category List</h1>
                 </header>
-                <div class='p-10 flex flex-col'>
-                    <div class='mb-3 flex justify-between'>
-                        <input />
-                        <button class='rounded-lg bg-purple-500 p-3 text-white'>
-                            <a href="/categories/create">
-                                Create
-                            </a>
-                        </button>
+                <div class="p-10 flex flex-col">
+                    <div class="mb-3 flex justify-between items-center">
+                        There <%= categories.meta.total === 1 ? 'is' : 'are' %> <%= categories.meta.total %> categor<%= categories.meta.total === 1 ? 'y' :
+                        'ies' %>. <% if (user && user.isAdmin) { %>
+                        <a href="/categories/create">
+                            <button class="rounded-lg bg-purple-500 p-3 text-white">Create</button>
+                        </a>
+                        <% } %>
                     </div>
-                    <div class="flex-grow mb-6">
-                        <table class='min-w-full bg-white'>
-                            <thead class='bg-gray-800 text-white'>
-                                <tr>
-                                    <th class='px-4 py-3 text-left text-sm font-semibold uppercase'>
-                                        No.
-                                    </th>
-                                    <th class='w-1/3 px-4 py-3 text-left text-sm font-semibold uppercase'>
-                                        Name
-                                    </th>
-                                    <th class='w-1/3 px-4 py-3 text-left text-sm font-semibold uppercase'>
-                                        Description
-                                    </th>
-                                    <th class='w-1/3 px-4 py-3 text-left text-sm font-semibold uppercase'>
-                                        Action
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody class='text-gray-700'>
-                                <% categories.data.forEach((element, index) => { %>
-                                    <tr>
-                                        <td class='px-4 py-3 text-left'>
-                                            <%= index %>
-                                        </td>
-                                        <td class='w-1/3 px-4 py-3 text-left'>
-                                            <%= element.name %>
-                                        </td>
-                                        <td class='w-1/3 px-4 py-3 text-left'>
-                                            <%= element.description %>
-                                        </td>
-                                        <td class='w-1/3 px-4 py-3 text-left relative group'>
-                                            <button class="relative">
-                                                View
+                    <table class="min-w-full bg-purple-100 rounded-lg flex-grow">
+                        <thead class="bg-purple-800 rounded-t-lg text-white">
+                            <tr>
+                                <th class="w-5 px-4 py-3 text-left text-sm font-semibold uppercase">No.</th>
+                                <th class="w-56 px-4 py-3 text-left text-sm font-semibold uppercase">Name</th>
+                                <th class="w-56 px-4 py-3 text-left text-sm font-semibold uppercase">Description</th>
+                                <% if (user && user.isAdmin) { %>
+                                <th class="w-min px-4 py-3 text-left text-sm font-semibold uppercase">Action</th>
+                                <% } %>
+                            </tr>
+                        </thead>
+                        <tbody class="text-gray-700">
+                            <% categories.data.forEach((element, index) => { %>
+                            <tr class="<%= index % 2 === 0 && 'bg-purple-50' %>">
+                                <td class="px-4 py-3 text-left"><%= (index + 1) + categories.meta.limit * categories.meta.page %></td>
+                                <td class="w-56 px-4 py-3 text-left" title="<%= element.name %>">
+                                    <div class="relative whitespace-nowrap overflow-hidden text-ellipsis" style="width: 15vw"><%= element.name %></div>
+                                </td>
+                                <td class="w-56 px-4 py-3 text-left" title="<%= element.description %>">
+                                    <div class="whitespace-nowrap overflow-hidden text-ellipsis" style="width: 50vw"><%= element.description %></div>
+                                </td>
+
+                                <% if (user && user.isAdmin) { %>
+                                <td class="px-4 py-3 text-left relative group" style="width: 50px">
+                                    <div class="relative group w-min">
+                                        <button class="relative hover:bg-slate-200/50 group-hover:bg-slate-200/50 rounded-lg p-3">
+                                            <i class="ph-fill ph-dots-three-outline-vertical"></i>
+                                        </button>
+                                        <div class="absolute hidden group-hover:flex right-0 z-10 flex-col gap-3 p-1 bg-white rounded-lg shadow-lg">
+                                            <a href="/categories/update/<%= element.id %>" class="hover:bg-purple-50 transition-all w-full h-full p-1 px-6">
+                                                <button id="category-update" data-id="<%= element.id %>">Update</button>
+                                            </a>
+                                            <button
+                                                id="category-delete"
+                                                data-id="<%= element.id %>"
+                                                class="border-2 border-red-500 text-black p-1 px-6 transition-all rounded-lg hover:bg-red-500 hover:text-white"
+                                            >
+                                                Delete
                                             </button>
-                                            <div class="absolute hidden group-hover:block">
-                                                <a href="/categories/update/<%= element.id %>">
-                                                    <button id="category-update" data-id="<%= element.id %>">Update</button>
-                                                </a>
-                                                <button id="category-delete" data-id="<%= element.id %>">Delete</button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                <% }) %>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class='flex items-center justify-center'>
-                        <div class='flex items-center justify-center space-x-4'>
-                            <button id="category-list-prev" class='cursor-pointer rounded-md border bg-gray-100 px-2 py-1 text-3xl leading-6 text-slate-400 shadow-sm transition hover:bg-gray-200 hover:text-slate-500 disabled:opacity-50 disabled:cursor-not-allowed'>
+                                        </div>
+                                    </div>
+                                </td>
+                                <% } %>
+                            </tr>
+                            <% }) %>
+                        </tbody>
+                    </table>
+                    <div class="flex items-center justify-center bg-purple-100 p-3 rounded-lg shadow-lg" style="position: fixed; right: 10px; bottom: 10px">
+                        <div class="flex items-center justify-center space-x-4">
+                            <button
+                                id="category-list-prev"
+                                class="cursor-pointer rounded-md border bg-gray-100 px-2 py-1 text-3xl leading-6 text-slate-400 shadow-sm transition hover:bg-gray-200 hover:text-slate-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
                                 &lt;
                             </button>
-                            <div class='text-slate-500'><%= categories.meta.page + 1 %>/<%= categories.meta.totalPages %></div>
-                            <button id="category-list-next" data-total="<%= categories.meta.totalPages %>" data-page="<%= categories.meta.page %>" class='cursor-pointer rounded-md border bg-gray-100 px-2 py-1 text-3xl leading-6 text-slate-400 shadow-sm transition hover:bg-gray-200 hover:text-slate-500 disabled:opacity-50 disabled:cursor-not-allowed'>
+                            <div class="text-slate-500"><%= categories.meta.page + 1 %>/<%= categories.meta.totalPages %></div>
+                            <button
+                                id="category-list-next"
+                                data-total="<%= categories.meta.totalPages %>"
+                                data-page="<%= categories.meta.page %>"
+                                class="cursor-pointer rounded-md border bg-gray-100 px-2 py-1 text-3xl leading-6 text-slate-400 shadow-sm transition hover:bg-gray-200 hover:text-slate-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
                                 &gt;
                             </button>
                         </div>

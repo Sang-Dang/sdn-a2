@@ -21,20 +21,26 @@ categoryListNext.addEventListener('click', function () {
 const categoryDeleteBtns = document.querySelectorAll('#category-delete')
 categoryDeleteBtns.forEach(btn => {
     btn.addEventListener('click', function () {
-        const id = btn.getAttribute('data-id')
-        if (id) {
-            fetch(`${window.origin}/api/v1/categories/${id}`, {
-                method: 'DELETE',
-            }).then(res => {
-                if (res.ok) {
-                    window.location.reload()
-                    alert('Success')
-                } else {
-                    alert('Error')
-                }
-            })
-        } else {
-            alert('Error')
+        const confirm = window.confirm(
+            'Are you sure you want to delete this category?',
+        )
+
+        if (confirm) {
+            const id = btn.getAttribute('data-id')
+            if (id) {
+                fetch(`${window.origin}/api/v1/categories/${id}`, {
+                    method: 'DELETE',
+                }).then(res => {
+                    if (res.ok) {
+                        window.location.reload()
+                        alert('Success')
+                    } else {
+                        alert('Error')
+                    }
+                })
+            } else {
+                alert('Error')
+            }
         }
     })
 })

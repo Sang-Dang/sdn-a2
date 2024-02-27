@@ -18,6 +18,10 @@ const CategoriesService = {
         }
     },
 
+    getAllCategories: async () => {
+        return await categoriesModel.find()
+    },
+
     getCategoryById: async (id: string) => {
         return await categoriesModel.findById(id)
     },
