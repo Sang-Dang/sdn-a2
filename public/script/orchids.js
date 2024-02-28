@@ -1,7 +1,7 @@
 const orchidsListPrev = document.querySelector('#orchids-list-prev')
 const orchidsListNext = document.querySelector('#orchids-list-next')
-const page = Number(orchidsListNext.getAttribute('data-page'))
-const maxPages = Number(orchidsListNext.getAttribute('data-total'))
+const page = Number(document.querySelector('#page').getAttribute('data-page'))
+const maxPages = Number(document.querySelector('#totalPages').getAttribute('data-totalPages'))
 
 orchidsListNext.disabled = page === maxPages - 1
 orchidsListPrev.disabled = page === 0
@@ -21,9 +21,7 @@ orchidsListNext.addEventListener('click', function () {
 const orchidDeleteBtns = document.querySelectorAll('#orchid-delete')
 orchidDeleteBtns.forEach(btn => {
     btn.addEventListener('click', function () {
-        const confirm = window.confirm(
-            'Are you sure you want to delete this orchid?',
-        )
+        const confirm = window.confirm('Are you sure you want to delete this orchid?')
         if (confirm) {
             const id = btn.getAttribute('data-id')
             if (id) {
@@ -42,27 +40,4 @@ orchidDeleteBtns.forEach(btn => {
             }
         }
     })
-})
-
-const imageModal = document.querySelector('#image-modal')
-const imageModalTag = imageModal.querySelector('#img')
-const imageModalOpens = document.querySelectorAll('#image-modal-open')
-const imageModalClose = document.querySelector('#image-modal-close')
-const imageModalBackdrop = document.querySelector('#image-modal-backdrop')
-
-imageModalOpens.forEach(btn => {
-    btn.addEventListener('click', () => {
-        console.log(btn.getAttribute('data-image'))
-        imageModalTag.src = btn.getAttribute('data-image')
-        imageModal.showModal()
-        console.log(imageModalTag)
-    })
-})
-
-imageModalClose.addEventListener('click', () => {
-    imageModal.close()
-})
-
-imageModalBackdrop.addEventListener('click', () => {
-    imageModal.close()
 })

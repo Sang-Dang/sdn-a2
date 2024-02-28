@@ -242,40 +242,23 @@
             <section id="auth" class="flex direction-column">
                 <div class="panel login flex direction-column">
                     <h1 title="Instagram" class="flex justify-content-center">
-                        <img
-                            src=""
-                            alt="Logo"
-                            title="Instagram logo"
-                            width="50%"
-                        />
+                        <img src="" alt="Logo" title="Instagram logo" width="50%" />
                     </h1>
                     <form method="post" action="/api/v1/users/login">
-                        <label for="username" class="sr-only"
-                            ></label
-                        >
-                        <input
-                            id="username"
-                            name="username"
-                            placeholder="Phone number, username or email address"
-                        />
+                        <label for="username" class="sr-only"></label>
+                        <input id="username" name="username" placeholder="Phone number, username or email address" />
 
                         <label for="password" class="sr-only">Password</label>
-                        <input
-                            name="password"
-                            type="password"
-                            placeholder="Password"
-                        />
+                        <input name="password" type="password" placeholder="Password" />
 
-                        <button type="submit" style="cursor: pointer;">Log In</button>
+                        <button type="submit" style="cursor: pointer">Log In</button>
                     </form>
                     <div class="flex separator align-items-center">
                         <span></span>
                         <div class="or">OR</div>
                         <span></span>
                     </div>
-                    <div
-                        class="login-with-fb flex direction-column align-items-center"
-                    >
+                    <div class="login-with-fb flex direction-column align-items-center">
                         <div>
                             <img />
                             <a>Log in with Google</a>
@@ -289,17 +272,17 @@
                 </div>
                 <div>
                     <% if(success_msg != ''){ %>
-                        <%= success_msg %>
+                    <%= success_msg %>
                     <% } %>
                     <% if(error_msg != ''){ %>
-                        <%= error %>
+                    <%= error %>
                     <% } %>
                     <% if(error != ''){ %>
-                        <%= error %> 
+                    <%= error %>
                     <% } %>
                 </div>
             </section>
-      
         </main>
+        <%- include('../partials/footer.ejs') %>
     </body>
 </html>

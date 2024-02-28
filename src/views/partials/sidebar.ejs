@@ -28,6 +28,17 @@
             <i class="ph-bold ph-list-dashes mr-3"></i>
             Categories
         </a>
+        <% if (user && user.isAdmin) { %>
+            <a
+            id="/accounts"
+            href="/accounts"
+            class="flex items-center py-4 pl-6 text-white opacity-75 transition-all hover:bg-purple-900 hover:opacity-100 bg-transparent"
+            style="<%= currentSite.includes('/accounts') ? 'background-color: rgb(80, 2, 132);' : '' %>"
+        >
+            <i class="ph-bold ph-list-dashes mr-3"></i>
+            Accounts
+        </a>
+        <% } %>
     </nav>
     <% if (user) { %>
     <form action="/api/v1/users/logout" method="post">

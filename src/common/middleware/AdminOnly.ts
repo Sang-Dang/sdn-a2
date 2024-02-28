@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 
 export default function AdminOnly(req: Request, res: Response, next: NextFunction) {
-    console.log(req.user)
     if (
         req.isAuthenticated() &&
         (

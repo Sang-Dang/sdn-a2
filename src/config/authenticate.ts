@@ -60,6 +60,8 @@ export default function passportInit(pp: typeof passport) {
                 id: user._id,
                 username: user.username,
                 isAdmin: user.isAdmin,
+                name: user.name,
+                YOB: user.YOB,
             })
         })
     })

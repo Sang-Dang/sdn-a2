@@ -1,65 +1,49 @@
-const nameInput = document.getElementById('input_name')
-const imageInput = document.getElementById('input_image')
-const priceInput = document.getElementById('input_price')
-const originInput = document.getElementById('input_origin')
-const colorInput = document.getElementById('input_color')
-const isNaturalInput = document.getElementById('input_isNatural')
-const categorySelect = document.getElementById('input_category')
-const submitBtn = document.getElementById('orchid-create-submit')
+const form = document.getElementById('orchid-create-form')
+const input_name = form.querySelector('#name')
+const input_price = form.querySelector('#price')
+const input_image = form.querySelector('#image')
+const input_color = form.querySelector('#color')
+const input_origin = form.querySelector('#origin')
+const input_category = form.querySelector('#category')
+const input_isNatural = form.querySelector('#isNatural')
 
-submitBtn.addEventListener('click', async () => {
-    const name = nameInput.value
-    const image = imageInput.value
-    const price = Number(priceInput.value)
-    const origin = originInput.value
-    const color = colorInput.value
-    const isNatural = Boolean(isNaturalInput.checked)
-    const categoryId = categorySelect.value
+const currentAction = document.getElementById('current-action').getAttribute('data-current')
+const orchidId = document.getElementById('orchid-id').getAttribute('data-id')
 
-    if (
-        !name ||
-        name.length < 3 ||
-        name.length > 255 ||
-        !image ||
-        image.length < 3 ||
-        image.length > 255 ||
-        !price ||
-        price < 0 ||
-        !origin ||
-        origin.length < 3 ||
-        origin.length > 255 ||
-        !color ||
-        color.length < 3 ||
-        color.length > 255 ||
-        !categoryId
-    ) {
-        alert('Inputs cannot be empty')
-        return
-    }
+const submit = document.getElementById('submit')
+
+submit.addEventListener('click', async event => {
+    event.preventDefault()
+    submit.setAttribute('disabled', 'disabled')
+    submit.innerHTML = currentAction === 'create' ? 'Creating...' : 'Updating...'
 
     const data = {
-        name,
-        image,
-        price,
-        origin,
-        color,
-        isNatural,
-        categoryId,
+        name: input_name.value,
+        price: Number(input_price.value),
+        image: input_image.value,
+        color: input_color.value,
+        origin: input_origin.value,
+        categoryId: input_category.value,
+        isNatural: input_isNatural.checked,
     }
 
     try {
-        await fetch('/api/v1/orchids', {
-            method: 'POST',
+        const response = await fetch(`/api/v1/orchids${currentAction === 'update' ? `/${orchidId}` : ''}`, {
+            method: currentAction === 'create' ? 'POST' : 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(data),
         })
-    } catch (err) {
-        console.error(err)
-        alert('Error')
-        return
+        const result = await response.json()
+        console.log(result)
+        alert(`Orchid ${currentAction === 'create' ? 'created' : 'updated'} successfully`)
+        window.location.href = '/orchids'
+    } catch (error) {
+        console.error(error)
+        alert(`Failed to ${currentAction === 'create' ? 'create' : 'update'} orchid`)
+    } finally {
+        submit.removeAttribute('disabled')
+        submit.innerHTML = currentAction === 'create' ? 'Create' : 'Update'
     }
-
-    window.location.href = '/orchids'
 })

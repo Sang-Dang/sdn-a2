@@ -2,127 +2,168 @@
 <html lang="en">
     <%- include('../partials/head.ejs', { title: "Orchids | Orchids Overflow"}) %>
     <body>
-        <div class="flex h-screen w-full">
-            <%- include('../partials/sidebar.ejs') %>
-            <main class="h-full w-full">
-                <header class="flex h-20 w-full items-center bg-purple-100 p-3 px-16 shadow-md">
-                    <h1 class="text-2xl font-semibold capitalize">Orchids List</h1>
-                </header>
-                <div class="p-10 flex flex-col">
-                    <div class="mb-3 flex justify-between items-center">
-                        There <%= orchids.meta.total === 1 ? 'is' : 'are' %> <%= orchids.meta.total %> orchid<%= orchids.meta.total === 1 ? '' : 's' %>. <% if
-                        (user && user.isAdmin) { %>
-                        <a href="/orchids/create">
-                            <button class="rounded-lg bg-purple-500 p-3 text-white">Create</button>
-                        </a>
-                        <% } %>
-                    </div>
-                    <table class="min-w-full bg-purple-100 rounded-lg">
-                        <thead class="bg-purple-800 text-white rounded-t-lg">
-                            <tr>
-                                <th class="w-5 px-4 py-3 text-left text-sm font-semibold">No.</th>
-                                <th class="px-4 py-3 text-left text-sm font-semibold">Name</th>
-                                <th class="w-40 px-4 py-3 text-left text-sm font-semibold">Image</th>
-                                <th class="px-4 py-3 text-left text-sm font-semibold">Price</th>
-                                <th class="px-4 py-3 text-left text-sm font-semibold">Origin</th>
-                                <th class="px-4 py-3 text-left text-sm font-semibold">Is Natural</th>
-                                <th class="px-4 py-3 text-left text-sm font-semibold">Color</th>
-                                <th class="px-4 py-3 text-left text-sm font-semibold">Category</th>
+        <%- include('../partials/navbar.ejs') %>
+        <div class="bg-slate-700 h-screen w-full">
+            <section class="p-3 sm:p-5">
+                <div class="mx-auto max-w-screen-xl px-4 lg:px-12">
+                    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+                        <div
+                            class="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 p-4 bg-white dark:bg-gray-900"
+                        >
+                            <div>
                                 <% if (user && user.isAdmin) { %>
-                                <th class="px-4 py-3 text-left text-sm font-semibold">Action</th>
+                                <button
+                                    type="button"
+                                    onclick="window.location.href='/orchids/create'"
+                                    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                                >
+                                    Create
+                                </button>
                                 <% } %>
-                            </tr>
-                        </thead>
-                        <tbody class="text-gray-700">
-                            <% orchids.data.forEach((element, index) => { %>
-                            <tr class="<%= index % 2 === 0 && 'bg-purple-50' %>">
-                                <td class="w-5 px-4 py-3 text-center"><%= (index + 1) + orchids.meta.limit * orchids.meta.page %></td>
-                                <td class="px-4 py-3 text-left" title="<%= element.name %>">
-                                    <div class="whitespace-nowrap overflow-hidden text-ellipsis" style="width: 10vw"><%= element.name %></div>
-                                </td>
-                                <td class="w-40 px-4 py-3 text-left">
-                                    <button data-image="<%= element.image %>" id="image-modal-open" class="hover:opacity-50 transition-all" title="View Image">
-                                        <img src="<%= element.image %>" alt="<%= element.name %>" class="w-20 h-20 rounded-lg" />
-                                    </button>
-                                </td>
-                                <td class="px-4 py-3 text-left" title="<%= element.price %>">
-                                    <div class="whitespace-nowrap overflow-hidden text-ellipsis" style="width: 5vw">$<%= element.price %></div>
-                                </td>
-                                <td class="px-4 py-3 text-left" title="<%= element.origin %>">
-                                    <div class="whitespace-nowrap overflow-hidden text-ellipsis" style="width: 10vw"><%= element.origin %></div>
-                                </td>
-                                <td class="px-4 py-3 text-left">
-                                    <% if (element.isNatural) { %>
-                                    <i class="ph-bold ph-check scale-125"></i>
-                                    <% } %>
-                                </td>
-                                <td class="px-4 py-3 text-left" title="<%= element.color %>">
-                                    <div class="whitespace-nowrap overflow-hidden text-ellipsis" style="width: 10vw"><%= element.color %></div>
-                                </td>
-                                <td class="px-4 py-3 text-left" title="<%= element.color %>">
-                                    <div class="whitespace-nowrap overflow-hidden text-ellipsis" style="width: 10vw"><%= element.category?.name %></div>
-                                </td>
-
-                                <% if (user && user.isAdmin) { %>
-                                <td class="px-4 py-3 text-left group">
-                                    <div class="relative group w-min">
-                                        <button class="relative hover:bg-slate-200/50 group-hover:bg-slate-200/50 rounded-lg p-3">
-                                            <i class="ph-fill ph-dots-three-outline-vertical"></i>
-                                        </button>
-                                        <div class="absolute hidden group-hover:flex right-0 z-10 flex-col gap-3 p-1 bg-white rounded-lg shadow-lg">
-                                            <a href="/orchids/update/<%= element.id %>" class="hover:bg-purple-50 transition-all w-full h-full p-1 px-6">
-                                                <button id="orchid-update" data-id="<%= element.id %>">Update</button>
-                                            </a>
-                                            <button
-                                                id="orchid-delete"
-                                                data-id="<%= element.id %>"
-                                                class="border-2 border-red-500 text-black p-1 px-6 transition-all rounded-lg hover:bg-red-500 hover:text-white"
-                                            >
-                                                Delete
-                                            </button>
-                                        </div>
+                            </div>
+                            <form action="/orchids/search" method="get" class="flex gap-3 items-center">
+                                <label for="table-search" class="sr-only">Search</label>
+                                <% if (isSearching) { %>
+                                <button
+                                    type="button"
+                                    onclick="window.location.href = '/orchids'"
+                                    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm p-1 mr-2 w-12 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                                >
+                                    Reset
+                                </button>
+                                <% } %>
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
+                                        <svg
+                                            class="w-4 h-4 text-gray-500 dark:text-gray-400"
+                                            aria-hidden="true"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            fill="none"
+                                            viewBox="0 0 20 20"
+                                        >
+                                            <path
+                                                stroke="currentColor"
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                stroke-width="2"
+                                                d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+                                            />
+                                        </svg>
                                     </div>
-                                </td>
-                                <% } %>
-                            </tr>
-                            <% }) %>
-                        </tbody>
-                    </table>
-                    <div class="flex items-center justify-center bg-purple-100 p-3 rounded-lg shadow-lg" style="position: fixed; right: 10px; bottom: 10px">
-                        <div class="flex items-center justify-center space-x-4">
-                            <button
-                                id="orchids-list-prev"
-                                data-page="<%= orchids.meta.page %>"
-                                class="cursor-pointer rounded-md border bg-gray-100 px-2 py-1 text-3xl leading-6 text-slate-400 shadow-sm transition hover:bg-gray-200 hover:text-slate-500 disabled:opacity-50 disabled:cursor-not-allowed"
-                            >
-                                &lt;
-                            </button>
-                            <div class="text-slate-500"><%= orchids.meta.page + 1 %> / <%= orchids.meta.totalPages %></div>
-                            <button
-                                id="orchids-list-next"
-                                data-page="<%= orchids.meta.page %>"
-                                data-total="<%= orchids.meta.totalPages %>"
-                                class="cursor-pointer rounded-md border bg-gray-100 px-2 py-1 text-3xl leading-6 text-slate-400 shadow-sm transition hover:bg-gray-200 hover:text-slate-500 disabled:opacity-50 disabled:cursor-not-allowed"
-                            >
-                                &gt;
-                            </button>
+                                    <input
+                                        type="text"
+                                        name="name"
+                                        id="table-search-orchids"
+                                        class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                        placeholder="Search for orchids by Name"
+                                        value="<%= isSearching ? searchQuery.name : '' %>"
+                                    />
+                                    <div class="absolute z-10 inset-y-0 rtl:inset-r-0 end-0 flex items-center ps-3">
+                                        <button
+                                            type="submit"
+                                            name="page"
+                                            value="1"
+                                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm p-1 mr-2 w-10 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                                        >
+                                            Go
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
+                        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3">Name</th>
+                                    <th scope="col" class="px-6 py-3">Price</th>
+                                    <th scope="col" class="px-6 py-3">Origin</th>
+                                    <th scope="col" class="px-6 py-3">State</th>
+                                    <th scope="col" class="px-6 py-3">Color</th>
+                                    <th scope="col" class="px-6 py-3">Category</th>
+                                    <th scope="col" class="px-6 py-3">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% orchids.data.forEach(orchid => { %>
+                                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                    <th scope="row" class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
+                                        <!-- <img class="w-10 h-10 rounded-full" src="<%= orchid.image %>" alt="image from <%= orchid.name %>" /> -->
+                                        <div class="text-base font-semibold"><%= orchid.name %></div>
+                                    </th>
+                                    <td class="px-6 py-4">$<%= orchid.price %></td>
+                                    <td class="px-6 py-4"><%= orchid.origin %></td>
+                                    <td class="px-6 py-4"><%= orchid.isNatural ? 'Natural' : 'Not Natural' %></td>
+                                    <td class="px-6 py-4"><%= orchid.color %></td>
+                                    <td class="px-6 py-4"><%= orchid.category.name %></td>
+                                    <td class="px-6 py-4 flex gap-3">
+                                        <button
+                                            onclick="window.location.href = '/orchids/<%= orchid.slug %>'"
+                                            type="button"
+                                            class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                                        >
+                                            View
+                                        </button>
+                                        <% if (user && user.isAdmin) { %>
+                                        <button
+                                            onclick="window.location.href = '/orchids/update/<%= orchid._id %>'"
+                                            type="button"
+                                            class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                                        >
+                                            Edit
+                                        </button>
+                                        <button
+                                            id="orchid-delete"
+                                            data-id="<%= orchid._id %>"
+                                            type="button"
+                                            class="px-3 py-2 text-xs font-medium text-center text-white rounded-lg focus:ring-4 focus:outline-none bg-red-700 hover:bg-red-800 focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
+                                        >
+                                            Delete
+                                        </button>
+                                        <% } %>
+                                    </td>
+                                </tr>
+                                <% }) %>
+                            </tbody>
+                        </table>
                     </div>
+                    <nav aria-label="Navigation-Pagination" class="mt-5">
+                        <ul class="inline-flex -space-x-px text-base h-10">
+                            <li>
+                                <button
+                                    id="orchids-list-prev"
+                                    onclick="window.location.href = '/orchids?page=<%= orchids.meta.page - 1 %>'"
+                                    class="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
+                                >
+                                    Previous
+                                </button>
+                            </li>
+                            <% for( let i = 0; i < orchids.meta.totalPages; i++ ) { %>
+                            <li>
+                                <a
+                                    href="/orchids?page=<%= i %>"
+                                    class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                                    ><%= i + 1 %></a
+                                >
+                            </li>
+                            <% } %>
+                            <li>
+                                <button
+                                    id="orchids-list-next"
+                                    class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
+                                    onclick="window.location.href = '/orchids?page=<%= orchids.meta.page + 1 %>'"
+                                >
+                                    Next
+                                </button>
+                            </li>
+                        </ul>
+                        <div id="page" data-page="<%= orchids.meta.page %>" />
+                        <div id="totalPages" data-totalPages="<%= orchids.meta.totalPages %>" />
+                    </nav>
                 </div>
-            </main>
+            </section>
         </div>
-        <dialog id="image-modal" style="border-radius: 10px; position: relative">
-            <div
-                style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: black; opacity: 0.5; z-index: 0"
-                id="image-modal-backdrop"
-            ></div>
-            <div style="position: relative; z-index: 50; background-color: white">
-                <div style="padding: 5px">
-                    <button id="image-modal-close" style="font-size: 24px; font-weight: bold">X</button>
-                </div>
-                <img id="img" style="max-width: 600px; max-height: 450px; border-radius: 0 0 10px 10px" />
-            </div>
-        </dialog>
+
         <script src="/script/orchids.js"></script>
+        <%- include('../partials/footer.ejs') %>
     </body>
 </html>

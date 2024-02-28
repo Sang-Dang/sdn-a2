@@ -2,10 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="utf-8" />
-        <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1, shrink-to-fit=no"
-        />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="Matteo Bruni" />
         <title>Register Template - tsParticles</title>
@@ -108,49 +105,21 @@
             <form method="post" action="/api/v1/users/register">
                 <div class="inputBox">
                     <label for="name">Name</label>
-                    <input
-                        type="text"
-                        name="name"
-                        id="name"
-                        placeholder="type your name"
-                        required
-                    />
+                    <input type="text" name="name" id="name" placeholder="type your name" required />
                 </div>
                 <div class="inputBox">
                     <label for="YOB">Year of birth</label>
-                    <input
-                        type="number"
-                        name="YOB"
-                        min="1900"
-                        max="2022"
-                        id="YOB"
-                        placeholder="e.g., 2023"
-                        required
-                    />
+                    <input type="number" name="YOB" min="1900" max="2022" id="YOB" placeholder="e.g., 2023" required />
                 </div>
                 <div class="inputBox">
                     <label for="username">Username</label>
-                    <input
-                        type="text"
-                        name="username"
-                        id="username"
-                        placeholder="type your username"
-                        required
-                    />
+                    <input type="text" name="username" id="username" placeholder="type your username" required />
                 </div>
                 <div class="inputBox">
                     <label for="userPassword">Password</label>
-                    <input
-                        type="password"
-                        name="password"
-                        id="userPassword"
-                        placeholder="type your password"
-                        required
-                    />
+                    <input type="password" name="password" id="userPassword" placeholder="type your password" required />
                 </div>
-                <button type="submit" style="float: left">
-                    Submit
-                </button>
+                <button type="submit" style="float: left">Submit</button>
             </form>
         </main>
 
@@ -161,7 +130,7 @@
         ></script>
         <script type="text/javascript">
             tsParticles.loadJSON('tsparticles', 'json/particles.json')
-
         </script>
+        <%- include('../partials/footer.ejs') %>
     </body>
 </html>

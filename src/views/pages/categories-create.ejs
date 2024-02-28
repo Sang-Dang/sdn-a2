@@ -1,73 +1,57 @@
 <!doctype html>
 <html lang="en">
-    <%- include('../partials/head.ejs', { title: "Create Category | Orchids Overflow"}) %>
+    <%- include('../partials/head.ejs', { title: `${!!category ? 'Update' : 'Create' } Category | Orchids Overflow`}) %>
     <body>
-        <div class="flex h-screen w-full">
-            <%- include('../partials/sidebar.ejs') %>
-            <main class="h-full w-full">
-                <header class="flex h-20 w-full items-center bg-purple-100 p-3 px-16 shadow-md">
-                    <h1 class="text-2xl font-semibold capitalize">Create Category</h1>
-                </header>
-                <div class="flex flex-col p-10">
-                    <form class="flex flex-col gap-3" method="post">
-                        <div class="flex flex-col gap-2">
-                            <label for="input_name">Name</label>
-                            <div class="flex items-center gap-3">
+        <%- include('../partials/navbar.ejs') %>
+        <div class="bg-slate-700 h-screen w-full">
+            <section class="p-3 sm:p-5">
+                <div class="mx-auto max-w-screen-xl px-4 lg:px-12">
+                    <section class="mb-5">
+                        <h3 class="text-3xl font-bold dark:text-white">Create a Category</h3>
+                    </section>
+                    <div class="flex flex-col">
+                        <div id="current-action" data-current="<%= !!category ? 'update' : 'create' %>" />
+                        <div id="category-id" data-id="<%= !!category ? category._id : '' %>" />
+                        <form class="flex flex-col gap-3" id="categories-create-form">
+                            <div>
+                                <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
                                 <input
-                                    id="input_name"
+                                    type="text"
+                                    id="name"
                                     name="name"
-                                    placeholder="e.g., Mobile phones"
-                                    pattern="^$|^.{3,255}$"
-                                    class="peer w-full rounded-lg border-2 border-purple-300 px-5 py-2 invalid:border-red-500"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    placeholder="e.g., Category Name"
+                                    value="<%= !!category ? category.name : '' %>"
+                                    required
                                 />
-                                <button type="button" class="group relative hidden peer-invalid:block text-red-500">
-                                    <i class="ph-bold ph-warning-circle"></i>
-                                    <div
-                                        class="absolute bottom-[calc(100%+14px)] right-0 hidden w-max text-red-500 font-semibold group-hover:block bg-red-50 text-sm p-2 rounded-lg"
-                                    >
-                                        "Name" must be between 1-255 characters.
-                                        <div
-                                            class="absolute top-full right-1 w-0 h-0 border-l-[12px] border-l-transparent border-t-[14px] border-t-red-50 border-r-[12px] border-r-transparent"
-                                        />
-                                    </div>
-                                </button>
                             </div>
-                        </div>
-                        <div class="flex flex-col gap-2">
-                            <label for="input_description">Description</label>
-                            <div class="flex items-center gap-3">
-                                <textarea
-                                    id="input_description"
+                            <div>
+                                <label for="description" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Description</label>
+                                <input
+                                    type="text"
+                                    id="description"
                                     name="description"
-                                    placeholder="e.g., This is the greatest thing ever!"
-                                    minlength="3"
-                                    maxlength="255"
-                                    class="peer w-full rounded-lg border-2 border-purple-300 px-5 py-2 invalid:border-red-500"
-                                ></textarea>
-                                <button type="button" class="group relative hidden peer-invalid:block text-red-500">
-                                    <i class="ph-bold ph-warning-circle"></i>
-                                    <div
-                                        class="absolute bottom-[calc(100%+14px)] right-0 hidden w-max text-red-500 font-semibold group-hover:block bg-red-50 text-sm p-2 rounded-lg"
-                                    >
-                                        "Description" must be between 1-255 characters.
-                                        <div
-                                            class="absolute top-full right-1 w-0 h-0 border-l-[12px] border-l-transparent border-t-[14px] border-t-red-50 border-r-[12px] border-r-transparent"
-                                        />
-                                    </div>
-                                </button>
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    placeholder="e.g., Description"
+                                    value="<%= !!category ? category.description : '' %>"
+                                    required
+                                />
                             </div>
-                        </div>
-                        <button
-                            id="category-create-submit"
-                            type="button"
-                            class="mt-3 w-56 rounded-lg bg-purple-500 px-6 py-2 font-bold text-white transition-all hover:bg-purple-400"
-                        >
-                            Create Category
-                        </button>
-                    </form>
+
+                            <button
+                                type="button"
+                                id="submit"
+                                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 mt-5"
+                            >
+                                <%= !!category ? 'Update' : 'Create' %>
+                                Category
+                            </button>
+                        </form>
+                    </div>
                 </div>
-            </main>
+            </section>
         </div>
     </body>
     <script src="/script/categories-create.js"></script>
+    <%- include('../partials/footer.ejs') %>
 </html>

@@ -2,8 +2,6 @@ import { GeneratePaginationMeta } from '@/lib/util/GeneratePaginationMeta'
 import categoriesModel from '@/modules/categories/categories.model'
 import { OrchidsDto, OrchidsDtoPartial } from '@/modules/orchids/orchids.dto'
 import orchidsModel from '@/modules/orchids/orchids.model'
-import mongoose from 'mongoose'
-import { Types } from 'mongoose'
 import { z } from 'zod'
 
 const OrchidsService = {
@@ -12,6 +10,7 @@ const OrchidsService = {
         return {
             data: await orchidsModel
                 .find()
+                .sort({ createdAt: -1 })
                 .populate('category')
                 .skip(page * limit)
                 .limit(limit)
@@ -21,7 +20,49 @@ const OrchidsService = {
     },
 
     getOrchidById: async (id: string) => {
-        return await orchidsModel.findById(id)
+        return await orchidsModel.findById(id).populate('category')
+    },
+
+    getOrchidByName: async (name: string, page: number, limit: number) => {
+        return {
+            data: await orchidsModel
+                .find({
+                    name: {
+                        $regex: new RegExp(name, 'i'),
+                    },
+                })
+                .sort({ createdAt: -1 })
+                .skip(page * limit)
+                .limit(limit),
+            meta: GeneratePaginationMeta(
+                await orchidsModel.countDocuments({
+                    name: {
+                        $regex: new RegExp(name, 'i'),
+                    },
+                }),
+                page,
+                limit,
+            ),
+        }
+    },
+
+    getOrchidsByCategory: async (categoryId: string, page: number, limit: number) => {
+        const totalDocuments = await orchidsModel.countDocuments({ category: categoryId })
+        return {
+            data: await orchidsModel
+                .find({ category: categoryId })
+                .sort({ createdAt: -1 })
+                .skip(page * limit)
+                .limit(limit)
+                .exec(),
+            meta: GeneratePaginationMeta(totalDocuments, page, limit),
+        }
+    },
+
+    getOrchidBySlug: async (slug: string) => {
+        return await orchidsModel.findOne({ slug }, undefined, {
+            populate: 'category',
+        })
     },
 
     createOrchid: async (payload: z.infer<typeof OrchidsDto>) => {
@@ -42,9 +83,27 @@ const OrchidsService = {
     },
 
     updateOrchid: async (id: string, payload: z.infer<typeof OrchidsDtoPartial>) => {
-        return await orchidsModel.findByIdAndUpdate(id, payload, {
-            new: true,
-        })
+        let category
+        if (payload.categoryId) {
+            category = await categoriesModel.findOne({
+                name: payload.categoryId,
+            })
+
+            if (category === null) {
+                throw new Error('Category not found')
+            }
+        }
+
+        return await orchidsModel.findByIdAndUpdate(
+            id,
+            {
+                ...payload,
+                category: category ? category._id : undefined,
+            },
+            {
+                new: true,
+            },
+        )
     },
 
     deleteOrchid: async (id: string) => {

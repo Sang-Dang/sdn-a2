@@ -1,26 +1,21 @@
 <!doctype html>
 <html lang="en">
-    <%- include('../partials/head.ejs', { title: 'Categories | Orchids Overflow'}) %>
+    <%- include('../partials/head.ejs', { title: "Accounts | Orchids Overflow"}) %>
     <body>
-        <%- include('../partials/navbar.ejs') %>
-        <div class="bg-slate-700 h-screen w-full">
+        <div class="h-screen w-full bg-slate-700">
+            <%- include('../partials/navbar.ejs') %>
             <section class="p-3 sm:p-5">
                 <div class="mx-auto max-w-screen-xl px-4 lg:px-12">
                     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
                         <div
                             class="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 p-4 bg-white dark:bg-gray-900"
                         >
-                            <div>
-                                <% if (user && user.isAdmin) { %>
-                                <button
-                                    type="button"
-                                    onclick="window.location.href='/categories/create'"
-                                    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-                                >
-                                    Create
-                                </button>
-                                <% } %>
-                            </div>
+                            <button
+                                type="button"
+                                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                            >
+                                Create
+                            </button>
                             <label for="table-search" class="sr-only">Search</label>
                             <div class="relative">
                                 <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
@@ -52,63 +47,46 @@
                             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                 <tr>
                                     <th scope="col" class="px-6 py-3">Name</th>
-                                    <th scope="col" class="px-6 py-3">Description</th>
-                                    <th scope="col" class="px-6 py-3">Created On</th>
+                                    <th scope="col" class="px-6 py-3">Year of Birth</th>
+                                    <th scope="col" class="px-6 py-3">Role</th>
                                     <th scope="col" class="px-6 py-3">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <% categories.data.forEach(category => { %>
+                                <% users.data.forEach(user => { %>
                                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                                    <th scope="row" class="px-6 py-4"><%= category.name %></th>
-                                    <td class="px-6 py-4"><%= category.description %></td>
-                                    <td class="px-6 py-4"><%= category.createdAt %></td>
-                                    <td class="px-6 py-4 flex gap-3">
-                                        <button
-                                            onclick="window.location.href = '/categories/<%= category.slug %>'"
-                                            type="button"
-                                            class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                                        >
-                                            View
-                                        </button>
-                                        <% if (user && user.isAdmin) { %>
-                                        <button
-                                            onclick="window.location.href = '/categories/update/<%= category.id %>'"
-                                            type="button"
-                                            class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                                        >
-                                            Edit
-                                        </button>
-                                        <button
-                                            id="category-delete"
-                                            data-id="<%= category._id %>"
-                                            type="button"
-                                            class="px-3 py-2 text-xs font-medium text-center text-white rounded-lg focus:ring-4 focus:outline-none bg-red-700 hover:bg-red-800 focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
-                                        >
-                                            Delete
-                                        </button>
-                                        <% } %>
+                                    <th scope="row" class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
+                                        <div class="ps-3">
+                                            <div class="text-base font-semibold"><%= user.name %></div>
+                                            <div class="font-normal text-gray-500"><%= user.username %></div>
+                                        </div>
+                                    </th>
+                                    <td class="px-6 py-4"><%= user.YOB %></td>
+                                    <td class="px-6 py-4"><%= user.isAdmin ? 'Admin' : 'User' %></td>
+                                    <td class="px-6 py-4">
+                                        <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit user</a>
                                     </td>
                                 </tr>
                                 <% }) %>
                             </tbody>
                         </table>
+
                     </div>
-                    <nav aria-label="Navigation-Pagination" class="mt-5">
+                    <nav aria-label="Navigation-Pagination">
                         <ul class="inline-flex -space-x-px text-base h-10">
                             <li>
                                 <button
-                                    id="category-list-prev"
-                                    onclick="window.location.href = '/categories?page=<%= categories.meta.page - 1 %>'"
+                                    onclick="window.location.href = 'http://localhost:3000/accounts?page=<%= users.meta.page - 1 %>'"
                                     class="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
+                                    disabled="<%= users.meta.page === 0 %>"
                                 >
                                     Previous
                                 </button>
                             </li>
-                            <% for( let i = 0; i < categories.meta.totalPages; i++ ) { %>
+                            <% for( let i = 0; i < (users.meta.totalDocuments / users.meta.limit); i++ ) { %>
                             <li>
                                 <a
-                                    href="/categories?page=<%= i %>"
+                                    href="http://localhost:3000/accounts?page=<%= i %>"
                                     class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
                                     ><%= i + 1 %></a
                                 >
@@ -116,22 +94,19 @@
                             <% } %>
                             <li>
                                 <button
-                                    id="category-list-next"
                                     class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
-                                    onclick="window.location.href = '/categories?page=<%= categories.meta.page + 1 %>'"
+                                    onclick="window.location.href = 'http://localhost:3000/accounts?page=<%= users.meta.page + 1 %>'"
+                                    disabled="<%= users.meta.page === (Math.ceil(users.meta.totalDocuments / users.meta.limit)) %>"
                                 >
                                     Next
                                 </button>
                             </li>
                         </ul>
-                        <div id="page" data-page="<%= categories.meta.page %>" />
-                        <div id="totalPages" data-totalPages="<%= categories.meta.totalPages %>" />
                     </nav>
                 </div>
             </section>
         </div>
-
-        <script src="/script/category.js"></script>
-        <%- include('../partials/footer.ejs') %>
+        <!-- <%- include('../partials/footer.ejs') %> -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
     </body>
 </html>
