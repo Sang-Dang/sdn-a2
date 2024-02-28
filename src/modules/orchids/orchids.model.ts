@@ -4,6 +4,27 @@ import slug from 'mongoose-slug-updater'
 
 mongoose.plugin(slug)
 
+export const commentsSchema = new Schema(
+    {
+        rating: {
+            type: Number,
+            min: 1,
+            max: 5,
+            require: true,
+        },
+        comment: {
+            type: String,
+            require: true,
+        },
+        author: {
+            type: Schema.ObjectId,
+            ref: 'users',
+            require: true,
+        },
+    },
+    { timestamps: true },
+)
+
 export const orchidsSchema = new Schema(
     {
         name: String,
@@ -16,6 +37,10 @@ export const orchidsSchema = new Schema(
             type: Schema.Types.ObjectId,
             ref: 'categories',
             require: true,
+        },
+        comments: {
+            type: [commentsSchema],
+            default: [],
         },
         slug: {
             type: String,

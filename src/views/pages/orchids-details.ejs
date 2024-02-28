@@ -3,10 +3,12 @@
     <%- include('../partials/head.ejs', { title: "Orchids | Orchids Overflow"}) %>
     <body>
         <%- include('../partials/navbar.ejs') %>
+        <div id="orchid-id" data-id="<%= orchid?._id %>"></div>
+        <div id="hasCommented" data-id="<%= hasCommented %>"></div>
         <div class="bg-slate-700 h-screen w-full">
             <section class="p-3 sm:p-5">
                 <div class="mx-auto max-w-screen-xl px-4 lg:px-12">
-                    <div class="flex justify-between">
+                    <div class="flex justify-between mb-5">
                         <h1 class="text-4xl font-bold text-white">
                             <%= orchid.name %>
                             <span class="text-sm font-normal text-gray-400 dark:text-gray-500"
@@ -83,13 +85,69 @@
                                     <p class="font-normal text-gray-700 dark:text-gray-400"><%= orchid.updatedAt %></p>
                                 </div>
                             </div>
+
+                            <table class="mt-5 w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3">Author</th>
+                                        <th scope="col" class="px-6 py-3">Rating</th>
+                                        <th scope="col" class="px-6 py-3">Comment</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% comments.forEach(comment => { %>
+                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                        <td class="px-6 py-4"><%= comment.author.name %></td>
+                                        <td class="px-6 py-4"><%= comment.rating %></td>
+                                        <td class="px-6 py-4"><%= comment.comment %></td>
+                                    </tr>
+                                    <% }) %>
+                                </tbody>
+                            </table>
                         </div>
                         <div class="col-span-4 w-full">
                             <div
-                                class="flex flex-col gap-2 w-full h-full p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
+                                class="flex flex-col gap-2 w-full h-min p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
                             >
                                 <img src="<%= orchid.image %>" alt="<%= orchid.name %>" class="w-full h-64 object-cover rounded-lg" />
                             </div>
+                            <form
+                                id="comment-form"
+                                class="mt-5 flex flex-col gap-2 w-full h-min p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
+                            >
+                                <h5 class="text-base font-bold dark:text-white">
+                                    <% if (user) { %>
+                                        Add Comment
+                                    <% } else {%>
+                                        Please login to add comment
+                                    <% } %>
+                                </h5>
+                                <div class="flex flex-col gap-2">
+                                    <label for="rating" class="text-sm font-medium dark:text-white">Rating</label>
+                                    <select id="rating" name="rating" class="w-full px-4 py-2 border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-700 dark:text-white disabled:opacity-50 disabled:cursor-not-allowed">
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                    </select>
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <label for="comment" class="text-sm font-medium dark:text-white">Comment</label>
+                                    <textarea
+                                        id="comment"
+                                        name="comment"
+                                        class="w-full px-4 py-2 border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-700 dark:text-white disabled:opacity-50 disabled:cursor-not-allowed"
+                                    ></textarea>
+                                </div>
+                                <button
+                                    type="submit"
+                                    id="comment-submit"
+                                    class="px-4 py-2 text-sm font-medium text-white bg-blue-700 border border-blue-700 rounded-lg hover:bg-blue-800 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:ring-offset-2 dark:bg-blue-600 dark:border-blue-600 dark:hover:bg-blue-500 dark:focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                                >
+                                    Add Comment
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>

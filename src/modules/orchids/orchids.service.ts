@@ -1,6 +1,6 @@
 import { GeneratePaginationMeta } from '@/lib/util/GeneratePaginationMeta'
 import categoriesModel from '@/modules/categories/categories.model'
-import { OrchidsDto, OrchidsDtoPartial } from '@/modules/orchids/orchids.dto'
+import { OrchidsDto, OrchidsDtoPartial, commentDTO } from '@/modules/orchids/orchids.dto'
 import orchidsModel from '@/modules/orchids/orchids.model'
 import { z } from 'zod'
 
@@ -108,6 +108,37 @@ const OrchidsService = {
 
     deleteOrchid: async (id: string) => {
         return await orchidsModel.findByIdAndDelete(id)
+    },
+
+    addComment: async (orchidId: string, authorId: string, dto: z.infer<typeof commentDTO>) => {
+        const orchid = await orchidsModel.findById(orchidId)
+
+        if (!orchid) {
+            throw new Error('Orchid not found')
+        }
+
+        // TODO wtf?
+        if (orchid.comments.some(comment => comment.author?._id.toString() === authorId)) {
+            throw new Error('You already commented on this orchid')
+        }
+
+        orchid.comments.push({
+            author: authorId,
+            comment: dto.comment,
+            rating: dto.rating,
+        })
+
+        await orchid.save()
+    },
+
+    getComments: async (orchidId: string) => {
+        const orchid = await orchidsModel.findById(orchidId).populate('comments.author')
+
+        if (!orchid) {
+            throw new Error('Orchid not found')
+        }
+
+        return orchid.comments
     },
 }
 

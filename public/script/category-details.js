@@ -19,24 +19,25 @@ categoryListNext.addEventListener('click', function () {
 })
 
 const categoryDeleteBtns = document.querySelector('#category-delete')
-categoryDeleteBtns.addEventListener('click', function () {
-    const confirm = window.confirm('Are you sure you want to delete this category? NOTE: This will delete all products in this category as well.')
+categoryDeleteBtns &&
+    categoryDeleteBtns.addEventListener('click', function () {
+        const confirm = window.confirm('Are you sure you want to delete this category? NOTE: This will delete all products in this category as well.')
 
-    if (confirm) {
-        const id = categoryDeleteBtns.getAttribute('data-id')
-        if (id) {
-            fetch(`/api/v1/categories/${id}`, {
-                method: 'DELETE',
-            }).then(res => {
-                if (res.ok) {
-                    window.location.href = '/categories?page=0'
-                    alert('Success')
-                } else {
-                    alert('Error')
-                }
-            })
-        } else {
-            alert('Error')
+        if (confirm) {
+            const id = categoryDeleteBtns.getAttribute('data-id')
+            if (id) {
+                fetch(`/api/v1/categories/${id}`, {
+                    method: 'DELETE',
+                }).then(res => {
+                    if (res.ok) {
+                        window.location.href = '/categories?page=0'
+                        alert('Success')
+                    } else {
+                        alert('Error')
+                    }
+                })
+            } else {
+                alert('Error')
+            }
         }
-    }
-})
+    })

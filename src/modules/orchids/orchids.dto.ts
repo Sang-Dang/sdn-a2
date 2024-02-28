@@ -11,3 +11,18 @@ export const OrchidsDto = z.object({
 })
 
 export const OrchidsDtoPartial = OrchidsDto.partial()
+
+export const commentDTO = z.object({
+    rating: z.string().refine(
+        value => {
+            const number = Number(value)
+            return !isNaN(number) && number >= 1 && number <= 5
+        },
+        {
+            message: 'Must be a numeric string between 1 and 5',
+        },
+    ),
+    comment: z.string(),
+})
+
+export const commentDTOPartial = commentDTO.partial()

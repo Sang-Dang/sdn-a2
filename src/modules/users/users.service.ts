@@ -3,6 +3,7 @@ import { z } from 'zod'
 import * as bcrypt from 'bcrypt'
 import usersModel from '@/modules/users/users.model'
 import { UserDTOPartial } from '@/modules/users/users.dto'
+import { GeneratePaginationMeta } from '@/lib/util/GeneratePaginationMeta'
 
 const UsersService = {
     saltRounds: 3 as const,
@@ -28,11 +29,7 @@ const UsersService = {
                 .skip(page * limit)
                 .limit(limit)
                 .exec(),
-            meta: {
-                totalDocuments: await usersModel.countDocuments(),
-                page,
-                limit,
-            },
+            meta: GeneratePaginationMeta(await usersModel.countDocuments(), page, limit),
         }
     },
 

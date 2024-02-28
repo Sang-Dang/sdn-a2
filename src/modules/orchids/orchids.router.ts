@@ -1,5 +1,6 @@
 import AdminOnly from '@/common/middleware/AdminOnly'
-import { OrchidsDto } from '@/modules/orchids/orchids.dto'
+import UserOnly from '@/common/middleware/UserOnly'
+import { OrchidsDto, commentDTO } from '@/modules/orchids/orchids.dto'
 import OrchidsService from '@/modules/orchids/orchids.service'
 import express, { NextFunction, Response } from 'express'
 import { z } from 'zod'
@@ -43,6 +44,29 @@ orchidsRouter.get(
             const result = await OrchidsService.getOrchidById(id)
             res.status(200).send(result)
         } catch (err) {
+            next(err)
+        }
+    },
+)
+
+orchidsRouter.post(
+    '/comments/:orchidId',
+    UserOnly,
+    validateRequest({
+        params: z.object({
+            orchidId: z.string().min(1),
+        }),
+        body: commentDTO,
+    }),
+    async (req, res, next) => {
+        const { orchidId } = req.params
+        const { id } = req.user as { id: string }
+        const payload = req.body
+        try {
+            const result = await OrchidsService.addComment(orchidId, id, payload)
+            res.status(200).send(result)
+        } catch (err) {
+            console.error(err)
             next(err)
         }
     },
@@ -101,15 +125,5 @@ orchidsRouter.delete(
         }
     },
 )
-
-// ! Testing code
-// TODO Remove this code
-
-orchidsRouter.post('/many', async (req, res) => {
-    const payload = req.body
-    for (const orchid of payload) {
-        await OrchidsService.createOrchid(orchid)
-    }
-})
 
 export default orchidsRouter

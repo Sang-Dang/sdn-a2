@@ -153,8 +153,26 @@ pagesRouter.get(
     async (req, res) => {
         const { slug } = req.params
         const orchid = await OrchidsService.getOrchidBySlug(slug)
+
+        if (!orchid) {
+            res.redirect('/not-found')
+            return
+        }
+
+        const comments = await OrchidsService.getComments(orchid._id.toString())
+        let hasCommented = true
+        if (req.user) {
+            const { id } = req.user as { id: string }
+            hasCommented = comments.some(comment => comment.author?._id.toString() === id)
+            console.log(id)
+        }
+
+        console.log(comments, hasCommented)
+
         res.render('pages/orchids-details.ejs', {
             orchid,
+            comments,
+            hasCommented,
             currentSite: req.originalUrl,
         })
     },
