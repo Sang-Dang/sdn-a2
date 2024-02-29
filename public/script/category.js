@@ -2,7 +2,7 @@ const categoryListPrev = document.querySelector('#category-list-prev')
 const categoryListNext = document.querySelector('#category-list-next')
 const page = Number(document.querySelector('#page').getAttribute('data-page'))
 const maxPages = Number(document.querySelector('#totalPages').getAttribute('data-totalPages'))
-const isSearching = document.querySelector('is-searching').getAttribute('data-id') === 'true'
+const isSearching = document.querySelector('#is-searching').getAttribute('data-id') === 'true'
 
 categoryListNext.disabled = page === maxPages - 1
 categoryListPrev.disabled = page === 0
