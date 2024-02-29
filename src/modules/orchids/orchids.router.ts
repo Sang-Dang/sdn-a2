@@ -74,6 +74,7 @@ orchidsRouter.post(
 
 orchidsRouter.post(
     '/',
+    AdminOnly,
     validateRequest({
         body: OrchidsDto,
     }),
@@ -90,6 +91,7 @@ orchidsRouter.post(
 
 orchidsRouter.patch(
     '/:id',
+    AdminOnly,
     validateRequest({
         params: z.object({
             id: z.string(),
@@ -110,6 +112,7 @@ orchidsRouter.patch(
 
 orchidsRouter.delete(
     '/:id',
+    AdminOnly,
     validateRequest({
         params: z.object({
             id: z.string(),

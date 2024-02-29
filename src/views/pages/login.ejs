@@ -241,45 +241,35 @@
         <main class="flex align-items-center justify-content-center">
             <section id="auth" class="flex direction-column">
                 <div class="panel login flex direction-column">
-                    <h1 title="Instagram" class="flex justify-content-center">
-                        <img src="" alt="Logo" title="Instagram logo" width="50%" />
-                    </h1>
+                    <h1 class="flex justify-content-center">Login to your account</h1>
                     <form method="post" action="/api/v1/users/login">
                         <label for="username" class="sr-only"></label>
                         <input id="username" name="username" placeholder="Phone number, username or email address" />
 
                         <label for="password" class="sr-only">Password</label>
                         <input name="password" type="password" placeholder="Password" />
-
                         <button type="submit" style="cursor: pointer">Log In</button>
+                        <div style="text-align: left; color: red; margin-top: 10px;">
+                            <% if(success_msg != ''){ %> <%= success_msg %> <% } %> <% if(error_msg != ''){ %> <%= error %> <% } %> <% if(error != ''){ %> <%=
+                            error %> <% } %>
+                        </div>
                     </form>
-                    <div class="flex separator align-items-center">
+                    <!-- <div class="flex separator align-items-center">
                         <span></span>
                         <div class="or">OR</div>
                         <span></span>
-                    </div>
-                    <div class="login-with-fb flex direction-column align-items-center">
+                    </div> -->
+                    <!-- <div class="login-with-fb flex direction-column align-items-center">
                         <div>
                             <img />
                             <a>Log in with Google</a>
                         </div>
                         <a href="#">Forgotten your password?</a>
-                    </div>
+                    </div> -->
                 </div>
                 <div class="panel register flex justify-content-center">
                     <p>Don't have an account?</p>
                     <a href="/register">Sign up</a>
-                </div>
-                <div>
-                    <% if(success_msg != ''){ %>
-                    <%= success_msg %>
-                    <% } %>
-                    <% if(error_msg != ''){ %>
-                    <%= error %>
-                    <% } %>
-                    <% if(error != ''){ %>
-                    <%= error %>
-                    <% } %>
                 </div>
             </section>
         </main>

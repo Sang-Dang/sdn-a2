@@ -1,4 +1,5 @@
 import AdminOnly from '@/common/middleware/AdminOnly'
+import NoUserOnly from '@/common/middleware/NoUserOnly'
 import UserOnly from '@/common/middleware/UserOnly'
 import CategoriesService from '@/modules/categories/categories.service'
 import OrchidsService from '@/modules/orchids/orchids.service'
@@ -26,6 +27,7 @@ pagesRouter.get('/categories', async (req, res) => {
 
     res.render('pages/categories', {
         categories,
+        isSearching: false,
         currentSite: req.originalUrl,
     })
 })
@@ -43,11 +45,38 @@ pagesRouter.get('/categories/update/:id', AdminOnly, async (req, res) => {
 
     const category = await CategoriesService.getCategoryById(id)
 
+    if (!category) {
+        res.redirect('/not-found')
+        return
+    }
+
     res.render('pages/categories-create', {
         category,
         currentSite: req.originalUrl,
     })
 })
+pagesRouter.get(
+    '/categories/search',
+    validateRequest({
+        query: z.object({
+            name: z.string(),
+            page: z.string().optional(),
+        }),
+    }),
+    async (req, res) => {
+        const { name, page } = req.query
+
+        const categories = await CategoriesService.searchByName(name, Number(page ?? 0), 5)
+        res.render('pages/categories', {
+            categories,
+            isSearching: true,
+            currentSite: req.originalUrl,
+            searchQuery: {
+                name,
+            },
+        })
+    },
+)
 
 pagesRouter.get(
     '/categories/:slug',
@@ -109,9 +138,13 @@ pagesRouter.get('/orchids/update/:id', AdminOnly, async (req, res) => {
     if (!id) res.redirect('/orchids')
 
     const orchid = await OrchidsService.getOrchidById(id)
-    const categories = await CategoriesService.getAllCategories()
 
-    console.log(orchid, categories)
+    if (!orchid) {
+        res.redirect('/not-found')
+        return
+    }
+
+    const categories = await CategoriesService.getAllCategories()
 
     res.render('pages/orchids-create', {
         orchid,
@@ -167,8 +200,6 @@ pagesRouter.get(
             console.log(id)
         }
 
-        console.log(comments, hasCommented)
-
         res.render('pages/orchids-details.ejs', {
             orchid,
             comments,
@@ -201,7 +232,19 @@ pagesRouter.get(
     async (req, res) => {
         const { id } = req.params
 
+        const loggedInUserId = (req.user as { id: string })!.id
+
+        if (loggedInUserId !== id) {
+            res.redirect('/not-found')
+            return
+        }
+
         const user = await UsersService.getUserById(id)
+
+        if (!user) {
+            res.redirect('/not-found')
+            return
+        }
 
         res.render('pages/accounts-details.ejs', {
             user,
@@ -210,11 +253,11 @@ pagesRouter.get(
     },
 )
 
-pagesRouter.get('/login', async (req, res) => {
+pagesRouter.get('/login', NoUserOnly, async (req, res) => {
     res.render('pages/login')
 })
 
-pagesRouter.get('/register', async (req, res) => {
+pagesRouter.get('/register', NoUserOnly, async (req, res) => {
     res.render('pages/register')
 })
 

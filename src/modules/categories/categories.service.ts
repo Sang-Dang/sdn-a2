@@ -1,8 +1,5 @@
 import categoriesModel from '@/modules/categories/categories.model'
-import {
-    CategoriesDto,
-    CategoriesDtoPartial,
-} from '@/modules/categories/categories.dto'
+import { CategoriesDto, CategoriesDtoPartial } from '@/modules/categories/categories.dto'
 import { z } from 'zod'
 import { GeneratePaginationMeta } from '@/lib/util/GeneratePaginationMeta'
 import orchidsModel from '@/modules/orchids/orchids.model'
@@ -30,6 +27,30 @@ const CategoriesService = {
 
     getCategoryBySlug: async (slug: string) => {
         return await categoriesModel.findOne({ slug })
+    },
+
+    searchByName: async (name: string, page: number, limit: number) => {
+        const totalDocuments = await categoriesModel.countDocuments({
+            name: {
+                $regex: new RegExp(name, 'i'),
+            },
+        })
+        const categories = await categoriesModel
+            .find({
+                name: {
+                    $regex: new RegExp(name, 'i'),
+                },
+            })
+            .sort({ createdAt: -1 })
+            .skip(page * limit)
+            .limit(limit)
+
+        console.log(categories, totalDocuments, name, typeof name, page, limit)
+
+        return {
+            data: categories,
+            meta: GeneratePaginationMeta(totalDocuments, page, limit),
+        }
     },
 
     createCategory: async (payload: z.infer<typeof CategoriesDto>) => {

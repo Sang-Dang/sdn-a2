@@ -11,6 +11,6 @@ export default function AdminOnly(req: Request, res: Response, next: NextFunctio
     ) {
         next()
     } else {
-        res.status(401).json({ message: 'Unauthorized' })
+        res.redirect('/')
     }
 }

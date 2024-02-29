@@ -31,6 +31,7 @@ const OrchidsService = {
                         $regex: new RegExp(name, 'i'),
                     },
                 })
+                .populate('category')
                 .sort({ createdAt: -1 })
                 .skip(page * limit)
                 .limit(limit),

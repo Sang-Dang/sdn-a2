@@ -23,8 +23,14 @@ submit.addEventListener('click', async event => {
             },
             body: JSON.stringify(data),
         })
-        alert(`Category ${currentAction === 'create' ? 'created' : 'updated'} successfully`)
-        window.location.href = '/categories'
+        const result = await response.json()
+        if (Array.isArray(result) && 'errors' in result[0] && result[0].errors.issues.length !== 0) {
+            const errorString = result[0].errors.issues.map(issue => '- ' + issue.path.join(', ') + ': ' + issue.message).join('\n')
+            alert(`Error ${currentAction === 'create' ? 'creating' : 'updating'} categories: \n` + errorString)
+        } else {
+            alert(`Category ${currentAction === 'create' ? 'created' : 'updated'} successfully`)
+            window.location.href = '/categories'
+        }
     } catch (error) {
         console.error(error)
         alert(`Failed to ${currentAction === 'create' ? 'create' : 'update'} category`)

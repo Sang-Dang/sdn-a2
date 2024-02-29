@@ -36,9 +36,13 @@ submit.addEventListener('click', async event => {
             body: JSON.stringify(data),
         })
         const result = await response.json()
-        console.log(result)
-        alert(`Orchid ${currentAction === 'create' ? 'created' : 'updated'} successfully`)
-        window.location.href = '/orchids'
+        if (Array.isArray(result) && 'errors' in result[0] && result[0].errors.issues.length !== 0) {
+            const errorString = result[0].errors.issues.map(issue => '- ' + issue.path.join(', ') + ': ' + issue.message).join('\n')
+            alert(`Error ${currentAction === 'create' ? 'creating' : 'updating'} orchid: \n` + errorString)
+        } else {
+            alert(`Orchid ${currentAction === 'create' ? 'created' : 'updated'} successfully`)
+            window.location.href = '/orchids'
+        }
     } catch (error) {
         console.error(error)
         alert(`Failed to ${currentAction === 'create' ? 'create' : 'update'} orchid`)
