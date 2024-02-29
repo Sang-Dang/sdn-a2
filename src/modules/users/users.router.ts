@@ -65,4 +65,27 @@ usersRouter.put(
     },
 )
 
+// TODO remove (for testing only)
+// Create admin user
+usersRouter.get('/init', async (req, res) => {
+    try {
+        const user = await UsersService.signup({
+            name: 'Admin User',
+            username: 'admin',
+            password: '12345',
+            YOB: 2000
+        })
+    
+        const toAdmin = await UsersService.makeAdmin(user._id.toString());
+    
+        res.send({
+            message: 'Admin user created'
+        })
+    } catch(error) {
+        res.send({
+            message: 'Admin user already exists'
+        })
+    }
+})
+
 export default usersRouter

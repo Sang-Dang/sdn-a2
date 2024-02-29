@@ -62,6 +62,13 @@ const UsersService = {
             success: result !== null,
         }
     },
+    // TODO remove (for testing only)
+    makeAdmin: async (id: string) => {
+        const result = await usersModel.findByIdAndUpdate(id, {
+            isAdmin: true,
+        })
+        return result
+    },
 }
 
 export default UsersService
